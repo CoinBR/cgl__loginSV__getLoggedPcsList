@@ -1,0 +1,14 @@
+version: "3.7"
+services:
+  sgl-login-sv-get-pcs-list:
+    build: .
+    environment:
+      - TZ='America/Recife'
+      - NUNBUFFERED=0
+    working_dir: /usr/src/app 
+    volumes:
+      - ./app/:/usr/src/app 
+    command: "python -u main.py"
+networks:
+  sgl_promo:
+    driver: host
