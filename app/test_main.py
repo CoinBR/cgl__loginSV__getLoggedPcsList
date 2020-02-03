@@ -23,6 +23,9 @@ class Test_take_ss():
         with pytest.raises(ValueError):
             m.take_ss('invalid') 
 
+    def test_valid_img_name(self):
+        m.take_ss('start') 
+
 
 
 def test_list_pcs_n_loggedstatus():
