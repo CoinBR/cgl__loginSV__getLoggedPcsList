@@ -1,5 +1,5 @@
-FROM python:3.8.1-alpine3.11
-RUN apk update
+FROM python:3.8.1-buster
+RUN apt-get update
 
 WORKDIR /usr/src/app
 

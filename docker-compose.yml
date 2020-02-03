@@ -10,5 +10,5 @@ services:
       - ./app/:/usr/src/app 
     command: "python -u main.py"
 networks:
-  sgl_promo:
+  sgl:
     driver: host
