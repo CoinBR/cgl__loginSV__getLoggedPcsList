@@ -1,4 +1,5 @@
 credentials
+app/img/tmp/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
