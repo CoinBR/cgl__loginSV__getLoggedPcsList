@@ -1,5 +1,6 @@
 from . import main as m
 import pytest
+import os
 
 
 class Test_get_img_path():
@@ -13,14 +14,14 @@ class Test_get_img_path():
             m.get_img_path('ref', 'invalid') 
 
     def test_valid_case(self):
-        assert m.get_img_path('tmp', 'max') == 'tmp/maximize_icon.jpg' 
+        assert m.get_img_path('tmp', 'max') == 'img/tmp/maximize_icon.jpg' 
 
 
 class Test_take_ss():
 
-   def test_invalid_img_name(self):
-    with pytest.raises(ValueError):
-        m.take_ss('invalid') 
+    def test_invalid_img_name(self):
+        with pytest.raises(ValueError):
+            m.take_ss('invalid') 
 
 
 

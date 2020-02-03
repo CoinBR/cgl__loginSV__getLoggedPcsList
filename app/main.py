@@ -1,5 +1,7 @@
 import cv2
 import numpy as np
+
+import os
 from subprocess import run
 
 SGL_IP = '192.168.0.111'
@@ -33,23 +35,41 @@ def get_img_path(folder: str, img_name: str) -> str:
 
     check_img_arg(img_name)
 
-    return '{}/{}.jpg'.format(folder, IMGS[img_name]['filename'])
+    return 'img/{}/{}.jpg'.format(folder, IMGS[img_name]['filename'])
+
 
 def take_ss(img_name: str):
+
+    def delete_old_ss(img_path):
+        if (os.path.exists(img_path)):
+            os.remove(img_path)
+
+
     # raise NotImplementedError()
     check_img_arg(img_name)
 
-#    prcs = run("")
+    img_path = get_img_path('tmp', img_name)
+    delete_old_ss(img_path)
 
+    prcs = run([(
+        'bin/vncsnapshot/vncsnapshot' +
+        ' -passwd {0}'.format('bin/vncsnapshot/credentials') +
+        ' -rect {0}'.format(IMGS[img_name]['screen_region']) +
+        ' -nocursor' + 
+        ' -ignoreblank' + 
+        ' -vncQuality 9' +
+        ' -quality 1000' +
+        ' ' + SGL_IP + 
+        ' ' + img_path
+        )], shell=True, check=True)
 
-
+    return cv2.imread(img_path)
 
 
 def list_pcs_n_loggedstatus():
     
     # raise NotImplementedError()
     return tuple(False for i in range(50))
-
 
 
 
