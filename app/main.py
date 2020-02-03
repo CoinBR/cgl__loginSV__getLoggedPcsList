@@ -4,6 +4,8 @@ import numpy as np
 import os
 from subprocess import run
 
+
+
 SGL_IP = '192.168.0.111'
 
 IMGS = {
@@ -24,6 +26,14 @@ IMGS = {
 
 FOLDERS = ('ref', 'tmp', )
 
+# Guiding for checking which PCs are on and off
+PIXELS = {
+        "start": 8,
+        "step_size": 21
+        }
+
+# PC is logged if pixel has this color
+LOGGEDPC_PIXEL_COLOR = [44, 199, 90]
 
 def check_img_arg(img_name: str):
     if img_name not in IMGS.keys():
@@ -44,8 +54,6 @@ def take_ss(img_name: str):
         if (os.path.exists(img_path)):
             os.remove(img_path)
 
-
-    # raise NotImplementedError()
     check_img_arg(img_name)
 
     img_path = get_img_path('tmp', img_name)
@@ -67,46 +75,23 @@ def take_ss(img_name: str):
 
 
 def list_pcs_n_loggedstatus():
-    
     # raise NotImplementedError()
-    return tuple(False for i in range(50))
+ # TODO: write tests
+# TODO: it should check if SGL is maximized and only program running b4 taking ss
 
+  
+    def get_pixels_indexes(start: int, step_size: int, end: int) -> tuple:
+        return tuple( ((i * step_size) + start for i in range(int( (end - start) / step_size)) ) )
 
+    def is_logged(pixel: int):
+        for i in range(3):
+            if ss[pixel, 0][i] != LOGGEDPC_PIXEL_COLOR[i]:
+                return False
+        return True
+        
 
-######################################
+    ss = take_ss('pcs')
+    indexes = get_pixels_indexes(PIXELS['start'], PIXELS['step_size'], ss.shape[0]) # shape0 = img's height
+    return tuple( (is_logged(pixel) for pixel in indexes) ) 
 
-
-
-# imgs are stored in two folders
-# "ref" represents the way the screenshot should Look if SGL is open
-# "tmp" is where the current screenshot will be saved
-#    it will then be compared with the one in "ref" folder
-##IMGS_DIR = ["ref", "tmp"]
-
-
-# "is_sgl_open" lists the screenshots (subsections of the screen)
-#     that are checked to see if SGL is open
-# "loggedin_list" is the image that will be analized to determine
-#     the PCs that currently have customers logged in
-##IMGS_NAMES = {
-#        "is_sgl_open": ['start_menu', 'maximize_icon'],
-#        "loggedin_list": "loggedin_list"
-#        }
-#
-#def get_image_path(folder, img_name):
-#
-#    def check_params():
-#        if folder == 0 or folder == 1:
-#            return get_image_path(IMGS_DIR[folder])
-#
-#        if folder not in IMGS_DIR:
-#            raise Exception("Invalid image folder name: <{}>".format(folder))
-#        
-#        if img_name not in IMGS_NAMES.keys and img_name not in IMGS.values:
-#            raise Exception("Invalid image name: <{}>".format(img_name))
-#
-#    if img_name 
-#    
-#
-#original = cv2.imread("imaoriginal_golden_bridge.jpg")
-#duplicate = cv2.imread("images/duplicate.jpg")
+print(list_pcs_n_loggedstatus())
