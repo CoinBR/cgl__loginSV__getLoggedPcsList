@@ -8,7 +8,10 @@ from subprocess import run
 
 SGL_IP = '192.168.0.111'
 
-IMGS = {
+# Images that will be compared with a reference
+# to check is SGL in the only program open and maixmized
+# in the server
+IMGS_TO_COMPARE = {
         "max": {
             "filename": "maximize_icon",
             "screen_region": "16x16+983+0"
@@ -18,16 +21,22 @@ IMGS = {
             "filename": "start_menu",
             "screen_region": "230x1+0+1267"
         },
+}
+
+# Screenshot with the list of PCs, and their logged status
+# it will be analized, but not compared with a reference img
+IMGS_TO_ANALIZE= {
         "pcs": {
             "filename": "pcs_list",
             "screen_region": "1x900+17+122"
-        }
-    }
+        }           
+}
 
-# Images that will be compared with a reference
-# to check is SGL in the only program open and maixmized
-# in the server
-IMGS_TO_COMPARE = ('max', 'start', )
+
+# All Imgs
+IMGS = dict()
+IMGS.update(IMGS_TO_COMPARE)
+IMGS.update(IMGS_TO_ANALIZE)
 
 FOLDERS = ('ref', 'tmp', )
 
@@ -84,18 +93,12 @@ def is_imgs_equal(img1, img2):
     original = img1 if not isinstance(img1, str) else cv2.imread(img1)
     duplicate = img2 if not isinstance(img2, str) else cv2.imread(img2)
 
-    print(original)
-    print()
-    print(100 * '-')
-    print()
-    print(duplicate)
-
     if original.shape == duplicate.shape:
-        print("The images have same size and channels")
+    #    print("The images have same size and channels")
         difference = cv2.subtract(original, duplicate)
         b, g, r = cv2.split(difference)
         if cv2.countNonZero(b) == 0 and cv2.countNonZero(g) == 0 and cv2.countNonZero(r) == 0:
-            print("The images are completely Equal")
+    #        print("The images are completely Equal")
             return True
     return False
 
@@ -109,7 +112,7 @@ def is_sgl_ready():
     # TODO: "returns falses" should send error msgs back to loginsv
     
 
-    for img in IMGS_TO_COMPARE:
+    for img in IMGS_TO_COMPARE.keys():
         try:
             tmp = take_ss(img)
             ref = get_img_path('ref', img)
