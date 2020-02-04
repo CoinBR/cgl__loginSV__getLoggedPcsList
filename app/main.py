@@ -20,7 +20,29 @@ IMGS_TO_COMPARE = {
         "start": {
             "filename": "start_menu",
             "screen_region": "230x1+0+1267"
+        },        
+
+        "pcs-ml": {
+            "filename": "logged_pcs_margin_left",
+            "screen_region": "3x1022+0+0"
         },
+
+        "pcs-mr": {
+            "filename": "logged_pcs_margin_right",
+            "screen_region": "1x1022+22+0"
+        },
+
+        "pcs-mt": {
+            "filename": "logged_pcs_margin_top",
+            "screen_region": "50x1+0+110"
+        },
+
+        "pcs-mb": {
+            "filename": "logged_pcs_margin_bottom",
+            "screen_region": "370x1+0+1023"
+        },
+
+
 }
 
 # Screenshot with the list of PCs, and their logged status
