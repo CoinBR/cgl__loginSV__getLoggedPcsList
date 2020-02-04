@@ -24,6 +24,11 @@ IMGS = {
         }
     }
 
+# Images that will be compared with a reference
+# to check is SGL in the only program open and maixmized
+# in the server
+IMGS_TO_COMPARE = ('max', 'start', )
+
 FOLDERS = ('ref', 'tmp', )
 
 # Guiding for checking which PCs are on and off
@@ -74,6 +79,48 @@ def take_ss(img_name: str):
     return cv2.imread(img_path)
 
 
+def is_imgs_equal(img1, img2):
+    # got from: https://pysource.com/2018/07/19/check-if-two-images-are-equal-with-opencv-and-python/
+    original = img1 if not isinstance(img1, str) else cv2.imread(img1)
+    duplicate = img2 if not isinstance(img2, str) else cv2.imread(img2)
+
+    print(original)
+    print()
+    print(100 * '-')
+    print()
+    print(duplicate)
+
+    if original.shape == duplicate.shape:
+        print("The images have same size and channels")
+        difference = cv2.subtract(original, duplicate)
+        b, g, r = cv2.split(difference)
+        if cv2.countNonZero(b) == 0 and cv2.countNonZero(g) == 0 and cv2.countNonZero(r) == 0:
+            print("The images are completely Equal")
+            return True
+    return False
+
+def is_sgl_ready():
+    # the server is ready to take more screenshots
+    # of SGL if:
+    # + SGL is Maximized
+    # + SGL is the only program open (in the start menu)
+    # + Start Menu is closed
+    #
+    # TODO: "returns falses" should send error msgs back to loginsv
+    
+
+    for img in IMGS_TO_COMPARE:
+        try:
+            tmp = take_ss(img)
+            ref = get_img_path('ref', img)
+            if not is_imgs_equal(tmp, ref):
+                return False
+        except Exception as e:
+            print(e)
+            return False
+
+    return True
+
 def list_pcs_logged_status():
     # raise NotImplementedError()
     # TODO: it should check if SGL is maximized and only program running b4 taking ss
@@ -88,6 +135,8 @@ def list_pcs_logged_status():
                 return False
         return True
         
+    if not is_sgl_ready():
+        return False # TODO: replace with error msg
 
     ss = take_ss('pcs')
     indexes = get_pixels_indexes(PIXELS['start'], PIXELS['step_size'], ss.shape[0]) # shape0 = img's height
