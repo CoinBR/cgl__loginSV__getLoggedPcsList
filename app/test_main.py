@@ -29,5 +29,5 @@ class Test_take_ss():
 
 
 def test_list_pcs_n_loggedstatus():
+    # write better tests in the future
     pass
-    # assert m.list_pcs_n_loggedstatus() == tuple(False for i in range(50))

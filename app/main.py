@@ -74,10 +74,9 @@ def take_ss(img_name: str):
     return cv2.imread(img_path)
 
 
-def list_pcs_n_loggedstatus():
+def list_pcs_logged_status():
     # raise NotImplementedError()
- # TODO: write tests
-# TODO: it should check if SGL is maximized and only program running b4 taking ss
+    # TODO: it should check if SGL is maximized and only program running b4 taking ss
 
   
     def get_pixels_indexes(start: int, step_size: int, end: int) -> tuple:
@@ -94,4 +93,4 @@ def list_pcs_n_loggedstatus():
     indexes = get_pixels_indexes(PIXELS['start'], PIXELS['step_size'], ss.shape[0]) # shape0 = img's height
     return tuple( (is_logged(pixel) for pixel in indexes) ) 
 
-print(list_pcs_n_loggedstatus())
+print(list_pcs_logged_status())
