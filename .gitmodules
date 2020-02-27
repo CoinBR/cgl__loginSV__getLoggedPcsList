@@ -1,0 +1,3 @@
+[submodule "do"]
+	path = do
+	url = git@github.com:CoinBR/do.git
