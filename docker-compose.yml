@@ -1,6 +1,6 @@
 version: "3.7"
 services:
-  sgl-login-sv-get-pcs-list:
+  cgl-loginsv-getpcslist:
     build: .
     environment:
       - TZ='America/Recife'
@@ -9,6 +9,3 @@ services:
     volumes:
       - ./app/:/usr/src/app 
     command: "python -u main.py"
-networks:
-  sgl:
-    driver: host
