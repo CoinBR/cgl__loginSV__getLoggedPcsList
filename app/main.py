@@ -2,7 +2,8 @@ import cv2
 import numpy as np
 
 import os
-from subprocess import run
+from time import sleep
+from subprocess import run, CalledProcessError
 
 
 
@@ -95,17 +96,22 @@ def take_ss(img_name: str):
     img_path = get_img_path('tmp', img_name)
     delete_old_ss(img_path)
 
-    prcs = run([(
-        'bin/vncsnapshot/vncsnapshot' +
-        ' -passwd {0}'.format('bin/vncsnapshot/credentials') +
-        ' -rect {0}'.format(IMGS[img_name]['screen_region']) +
-        ' -nocursor' + 
-        ' -ignoreblank' + 
-        ' -vncQuality 9' +
-        ' -quality 1000' +
-        ' ' + SGL_IP + 
-        ' ' + img_path
-        )], shell=True, check=True)
+    try:
+        prcs = run([(
+            'bin/vncsnapshot/vncsnapshot' +
+            ' -passwd {0}'.format('bin/vncsnapshot/credentials') +
+            ' -rect {0}'.format(IMGS[img_name]['screen_region']) +
+            ' -nocursor' + 
+            ' -ignoreblank' + 
+            ' -vncQuality 9' +
+            ' -quality 1000' +
+            ' ' + SGL_IP + 
+            ' ' + img_path
+            )], shell=True, check=True)
+
+    except CalledProcessError as e:
+        sleep(1)
+        return take_ss(img_name)
 
     return cv2.imread(img_path)
 
@@ -167,4 +173,7 @@ def list_pcs_logged_status():
     indexes = get_pixels_indexes(PIXELS['start'], PIXELS['step_size'], ss.shape[0]) # shape0 = img's height
     return tuple( (is_logged(pixel) for pixel in indexes) ) 
 
-print(list_pcs_logged_status())
+result = list_pcs_logged_status()
+print('------------------------------------------------------____________________------')
+print(result)
+
